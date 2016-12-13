@@ -5,13 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.guest.habittracker.ActivitiesActivity">
 
-    <ExpandableListView
-        android:layout_width="match_parent"
+    <fragment
+        android:id="@+id/fragmentRestaurantList"
+        android:name="com.example.guest.habittracker.ActivitiesFragment"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/expandableListView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+        tools:layout="@layout/fragment_activities" />
 
 </RelativeLayout>
