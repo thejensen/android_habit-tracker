@@ -1,7 +1,9 @@
-package com.example.guest.habittracker;
+package com.example.guest.habittracker.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.guest.habittracker.R;
 
 public class ActivitiesActivity extends AppCompatActivity {
 

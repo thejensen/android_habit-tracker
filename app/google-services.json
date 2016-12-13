@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "99785188343",
+    "firebase_url": "https://habittracker-fca58.firebaseio.com",
+    "project_id": "habittracker-fca58",
+    "storage_bucket": "habittracker-fca58.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99785188343:android:f30f8740670c15a8",
+        "android_client_info": {
+          "package_name": "com.example.guest.habittracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99785188343-81aj9qv4v8ntcllsqsfl7fjjiqa8spnv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.guest.habittracker",
+            "certificate_hash": "55E62543E32288816B3621F7AF2C25803467FCFF"
+          }
+        },
+        {
+          "client_id": "99785188343-vnmpcu2vpimnnc9vvpps8ar6mr9foinq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA_O71DPiLNoTSdtzhQXfMiGA0W8smKsg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99785188343-vnmpcu2vpimnnc9vvpps8ar6mr9foinq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

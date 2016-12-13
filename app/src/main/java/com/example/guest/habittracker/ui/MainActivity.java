@@ -1,10 +1,14 @@
-package com.example.guest.habittracker;
+package com.example.guest.habittracker.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.guest.habittracker.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -14,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.button2) Button mButton2;
     @Bind(R.id.button3) Button mButton3;
     @Bind(R.id.button4) Button mButton4;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -21,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mSharedPreferences.edit();
         mButton1.setOnClickListener(this);
         mButton2.setOnClickListener(this);
         mButton3.setOnClickListener(this);
@@ -32,16 +40,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, ActivitiesActivity.class);
         switch(view.getId()){
             case R.id.button:
-                intent.putExtra("motivation", 1);
+                mEditor.putInt("motivation", 1).apply();
                 break;
             case R.id.button2:
-                intent.putExtra("motivation", 2);
+                mEditor.putInt("motivation", 2).apply();
                 break;
             case R.id.button3:
-                intent.putExtra("motivation", 3);
+                mEditor.putInt("motivation", 3).apply();
                 break;
             case R.id.button4:
-                intent.putExtra("motivation", 4);
+                mEditor.putInt("motivation", 4).apply();
                 break;
         }
         startActivity(intent);

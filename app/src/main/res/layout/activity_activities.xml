@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.guest.habittracker.ActivitiesActivity">
+    tools:context=".ui.ActivitiesActivity">
 
     <fragment
-        android:id="@+id/fragmentRestaurantList"
-        android:name="com.example.guest.habittracker.ActivitiesFragment"
-        android:layout_width="wrap_content"
+        android:id="@+id/fragmentActivityList"
+        android:name="com.example.guest.habittracker.ui.ActivitiesFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_activities" />
 
