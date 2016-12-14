@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 
 /**
  * TODO: hook up expanded tracker of the habit to database
- * TODO: Fix bug where keyboard is breaking listview
  * TODO: add Firebase auth
  * TODO: calendar
  * TODO: make it look less terrible
