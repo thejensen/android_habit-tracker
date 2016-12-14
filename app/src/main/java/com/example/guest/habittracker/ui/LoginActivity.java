@@ -9,14 +9,17 @@ import android.widget.TextView;
 import com.example.guest.habittracker.R;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    @Bind(R.id.registerTextView)
-    TextView mRegisterTextView;
+    @Bind(R.id.registerTextView) TextView mRegisterTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+
+        mRegisterTextView.setOnClickListener(this);
     }
 
     @Override
