@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_cal, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -102,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_logout) {
             logout();
             return true;
+        } else if(id == R.id.action_cal){
+            Intent intent = new Intent(this, CalendarActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
