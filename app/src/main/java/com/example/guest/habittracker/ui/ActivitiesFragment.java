@@ -89,6 +89,8 @@ public class ActivitiesFragment extends Fragment{
             }
         });
 
+
+
         mActivityRef = FirebaseDatabase.getInstance().getReference("users").child(mUserId).child("activities").orderByChild("motivationLevel").equalTo(motivation);
         mchildEventListener = mActivityRef.addChildEventListener(new ChildEventListener() {
             @Override

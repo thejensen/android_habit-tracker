@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="afterDescendants">
+    android:descendantFocusability="afterDescendants"
+    android:background="@color/colorPrimaryLight"
+    android:padding="5dp">
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -10,66 +12,16 @@
         android:text="I did it!"
         android:id="@+id/doneCheckBox"
         android:checked="false"
-        android:textSize="18sp" />
+        android:textSize="32sp"
+        android:layout_gravity="center"/>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/weeklyGoalTextView"
         android:text="Your weekly goal:"
         android:textSize="18sp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/notesEditText"
-        android:lines="4"
-        android:hint="Enter notes here"
-        android:background="#ffffff"
-
-        android:textSize="18sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Previous notes:"
-        android:id="@+id/textView4"
-        android:textSize="18sp"
-        android:layout_marginBottom="5dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No notes yet!"
-        android:id="@+id/notesTextView"
-        android:textSize="18sp"
-        android:layout_marginBottom="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="How did it go today?"
-        android:id="@+id/textView2"
-        android:textSize="18sp" />
-
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/newRatingBar"
-        android:stepSize=".5"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Average score:"
-        android:id="@+id/textView3"
-        android:textSize="18sp" />
-
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/averageRatingBar"
-        android:clickable="false" />
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

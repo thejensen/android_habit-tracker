@@ -1,6 +1,7 @@
 package com.example.guest.habittracker.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,15 @@ import android.widget.TextView;
 
 import com.example.guest.habittracker.R;
 import com.example.guest.habittracker.models.Activity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +35,9 @@ public class ActivityExpandableListViewAdapter extends BaseExpandableListAdapter
     private Context mContext;
     private Activity activity;
     private String mUserId;
+    private String mDate;
+    private List<Activity> todaysActivityList = new ArrayList<>();
+    private DatabaseReference mDateRef;
 
     public ActivityExpandableListViewAdapter(List<Activity> activityList, Context context, String userId){
         itemLayoutId = R.layout.expanded_activity_list_item;
@@ -37,6 +45,23 @@ public class ActivityExpandableListViewAdapter extends BaseExpandableListAdapter
         this.activityList = activityList;
         mContext = context;
         mUserId = userId;
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        mDate = dateFormat.format(Calendar.getInstance().getTime());
+        mDateRef = FirebaseDatabase.getInstance().getReference("users").child(mUserId).child("dates").child(mDate);
+        mDateRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Activity doneActivity = snapshot.getValue(Activity.class);
+                    todaysActivityList.add(doneActivity);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -102,16 +127,21 @@ public class ActivityExpandableListViewAdapter extends BaseExpandableListAdapter
         TextView weeklyGoalView = (TextView) v.findViewById(R.id.weeklyGoalTextView);
         weeklyGoalView.setText("Your Weekly Goal: " + activity.getWeeklyGoal() + " times");
         CheckBox doneCheckBox = (CheckBox) v.findViewById(R.id.doneCheckBox);
+        Log.i("adapter", "getChildView: " + todaysActivityList.contains(activity));
+        if(todaysActivityList.contains(activity)){
+            doneCheckBox.setChecked(true);
+        } else {
+            doneCheckBox.setChecked(false);
+        }
         doneCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
-                String date = dateFormat.format(Calendar.getInstance().getTime());
-                DatabaseReference dateRef = FirebaseDatabase.getInstance().getReference("users").child(mUserId).child("dates").child(date);
                 if(b){
-                    dateRef.child(activity.getPushId()).setValue("true");
+                    mDateRef.child(activity.getPushId()).setValue(activity);
+                    todaysActivityList.add(activity);
                 } else {
-                    dateRef.child(activity.getPushId()).removeValue();
+                    mDateRef.child(activity.getPushId()).removeValue();
+                    todaysActivityList.remove(activity);
                 }
             }
         });
