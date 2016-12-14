@@ -12,13 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
 import com.example.guest.habittracker.R;
 import com.example.guest.habittracker.adapters.ActivityExpandableListViewAdapter;
 import com.example.guest.habittracker.models.Activity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 
 /**
  * TODO: hook up expanded tracker of the habit to database
- * TODO: add Firebase auth
  * TODO: calendar
  * TODO: make it look less terrible
  * TODO: do the animation/fragment stuff they actually want us to do
@@ -47,6 +46,9 @@ public class ActivitiesFragment extends Fragment{
     private ActivityExpandableListViewAdapter mAdapter;
     @Bind(R.id.expandableListView)
     ExpandableListView mExpandableListView;
+    private String mUserId;
+    private Query mActivityRef;
+    private ChildEventListener mchildEventListener;
 
     public ActivitiesFragment() {
         // Required empty public constructor
@@ -70,6 +72,7 @@ public class ActivitiesFragment extends Fragment{
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int motivation = mSharedPreferences.getInt("motivation", 4);
         mAdapter = new ActivityExpandableListViewAdapter(mActivities, getActivity());
+        mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mExpandableListView.setAdapter(mAdapter);
         mExpandableListView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         mExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
@@ -85,8 +88,8 @@ public class ActivitiesFragment extends Fragment{
             }
         });
 
-        Query activityRef = FirebaseDatabase.getInstance().getReference("activities").orderByChild("motivationLevel").equalTo(motivation);
-        activityRef.addChildEventListener(new ChildEventListener() {
+        mActivityRef = FirebaseDatabase.getInstance().getReference("users").child(mUserId).child("activities").orderByChild("motivationLevel").equalTo(motivation);
+        mchildEventListener = mActivityRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 mActivities.add(dataSnapshot.getValue(Activity.class));
@@ -125,4 +128,9 @@ public class ActivitiesFragment extends Fragment{
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mActivityRef.removeEventListener(mchildEventListener);
+    }
 }

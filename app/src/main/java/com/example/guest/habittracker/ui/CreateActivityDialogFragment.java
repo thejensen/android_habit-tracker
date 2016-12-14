@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.example.guest.habittracker.R;
 import com.example.guest.habittracker.models.Activity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,11 +33,12 @@ public class CreateActivityDialogFragment extends DialogFragment {
                 .setView(inflater.inflate(R.layout.dialog_add_activity, null))
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         EditText activityNameInput = (EditText) getDialog().findViewById(R.id.activityNameEditText);
                         EditText goalInput = (EditText) getDialog().findViewById(R.id.goalEditText);
                         int motivation = mSharedPreferences.getInt("motivation", 4);
                         Activity activity = new Activity(activityNameInput.getText().toString(), Integer.parseInt(goalInput.getText().toString()), motivation);
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("activities").push();
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(userId).child("activities").push();
                         activity.setPushId(ref.getKey());
                         ref.setValue(activity);
                     }

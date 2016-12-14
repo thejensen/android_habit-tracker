@@ -14,12 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.guest.habittracker.R;
+import com.example.guest.habittracker.models.Activity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,6 +45,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth.AuthStateListener mAuthListener;
     private ProgressDialog mAuthProgressDialog;
     private String mName;
+    private String mId;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +109,25 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Authentication successful");
+                            mId = task.getResult().getUser().getUid();
+                            DatabaseReference activityReference = FirebaseDatabase.getInstance().getReference("activities");
+                            activityReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(mId).child("activities");
+                                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                                        Activity activity = snapshot.getValue(Activity.class);
+                                        DatabaseReference pushRef = userRef.push();
+                                        activity.setPushId(pushRef.getKey());
+                                        pushRef.setValue(activity);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                             createFirebaseUserProfile(task.getResult().getUser());
                         } else {
                             Toast.makeText(CreateAccountActivity.this, "Authentication failed.",
