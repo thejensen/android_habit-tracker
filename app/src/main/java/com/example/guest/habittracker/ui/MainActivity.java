@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.Button;
 
 import com.example.guest.habittracker.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,12 +26,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.button4) Button mButton4;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    getSupportActionBar().setTitle("Welcome, " + user.getDisplayName() + "!");
+                } else {
+
+                }
+            }
+        };
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mEditor = mSharedPreferences.edit();
@@ -37,6 +53,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton2.setOnClickListener(this);
         mButton3.setOnClickListener(this);
         mButton4.setOnClickListener(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
     @Override
@@ -83,4 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
         finish();
     }
+
+
 }
