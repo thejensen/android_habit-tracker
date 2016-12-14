@@ -68,4 +68,3 @@ public class Activity {
         this.emotion = emotion;
     }
 }
-

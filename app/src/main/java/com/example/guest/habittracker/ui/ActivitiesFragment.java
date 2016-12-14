@@ -1,14 +1,18 @@
 package com.example.guest.habittracker.ui;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
@@ -35,7 +39,8 @@ import butterknife.ButterKnife;
  * TODO: make it look less terrible
  * TODO: do the animation/fragment stuff they actually want us to do
  */
-public class ActivitiesFragment extends Fragment {
+public class ActivitiesFragment extends Fragment{
+    private static final String TAG = ActivitiesFragment.class.getSimpleName();
     @Bind(R.id.addActivityButton)
     Button mAddActivityButton;
     private SharedPreferences mSharedPreferences;
@@ -67,7 +72,20 @@ public class ActivitiesFragment extends Fragment {
         int motivation = mSharedPreferences.getInt("motivation", 4);
         mAdapter = new ActivityExpandableListViewAdapter(mActivities, getActivity());
         mExpandableListView.setAdapter(mAdapter);
-        mExpandableListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+        mExpandableListView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        mExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int i) {
+                Log.i(TAG, "onGroupCollapse: ");
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (mExpandableListView.getFocusedChild() != null) {
+                    Log.i(TAG, "onGroupCollapse: focused child not null");
+                    inputManager.hideSoftInputFromWindow(mExpandableListView.getFocusedChild().getWindowToken(), 0);
+                    mExpandableListView.getFocusedChild().clearFocus();
+                }
+            }
+        });
+
         Query activityRef = FirebaseDatabase.getInstance().getReference("activities").orderByChild("motivationLevel").equalTo(motivation);
         activityRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -106,5 +124,6 @@ public class ActivitiesFragment extends Fragment {
         });
         return view;
     }
+
 
 }
