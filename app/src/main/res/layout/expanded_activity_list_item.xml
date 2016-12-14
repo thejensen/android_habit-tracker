@@ -8,9 +8,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="I did it!"
-        android:id="@+id/checkBox"
+        android:id="@+id/doneCheckBox"
         android:checked="false"
         android:textSize="18sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/weeklyGoalTextView"
+        android:text="Your weekly goal:"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:layout_width="match_parent"

@@ -5,12 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.guest.habittracker.R;
 import com.example.guest.habittracker.models.Activity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Guest on 12/13/16.
@@ -20,12 +28,15 @@ public class ActivityExpandableListViewAdapter extends BaseExpandableListAdapter
     private int itemLayoutId;
     private int groupLayoutId;
     private Context mContext;
+    private Activity activity;
+    private String mUserId;
 
-    public ActivityExpandableListViewAdapter(List<Activity> activityList, Context context){
+    public ActivityExpandableListViewAdapter(List<Activity> activityList, Context context, String userId){
         itemLayoutId = R.layout.expanded_activity_list_item;
         groupLayoutId = android.R.layout.simple_expandable_list_item_1;
         this.activityList = activityList;
         mContext = context;
+        mUserId = userId;
     }
 
     @Override
@@ -87,7 +98,23 @@ public class ActivityExpandableListViewAdapter extends BaseExpandableListAdapter
                     (Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(itemLayoutId, parent, false);
         }
-        Activity activity = activityList.get(groupPosition);
+        activity = activityList.get(groupPosition);
+        TextView weeklyGoalView = (TextView) v.findViewById(R.id.weeklyGoalTextView);
+        weeklyGoalView.setText("Your Weekly Goal: " + activity.getWeeklyGoal() + " times");
+        CheckBox doneCheckBox = (CheckBox) v.findViewById(R.id.doneCheckBox);
+        doneCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+                String date = dateFormat.format(Calendar.getInstance().getTime());
+                DatabaseReference dateRef = FirebaseDatabase.getInstance().getReference("users").child(mUserId).child("dates").child(date);
+                if(b){
+                    dateRef.child(activity.getPushId()).setValue("true");
+                } else {
+                    dateRef.child(activity.getPushId()).removeValue();
+                }
+            }
+        });
         return v;
     }
 

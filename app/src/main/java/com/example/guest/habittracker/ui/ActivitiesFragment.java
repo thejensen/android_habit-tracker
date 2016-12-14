@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
  * TODO: calendar
  * TODO: make it look less terrible
  * TODO: do the animation/fragment stuff they actually want us to do
+ * TODO: color code by motivation level -> darker color = more things accomplished for that day
  */
 public class ActivitiesFragment extends Fragment{
     private static final String TAG = ActivitiesFragment.class.getSimpleName();
@@ -71,8 +72,8 @@ public class ActivitiesFragment extends Fragment{
         ButterKnife.bind(this, view);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int motivation = mSharedPreferences.getInt("motivation", 4);
-        mAdapter = new ActivityExpandableListViewAdapter(mActivities, getActivity());
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mAdapter = new ActivityExpandableListViewAdapter(mActivities, getActivity(), mUserId);
         mExpandableListView.setAdapter(mAdapter);
         mExpandableListView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         mExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
