@@ -62,6 +62,7 @@ public class ActivitiesFragment extends Fragment {
         int motivation = mSharedPreferences.getInt("motivation", 4);
         mAdapter = new ActivityExpandableListViewAdapter(mActivities, getActivity());
         mExpandableListView.setAdapter(mAdapter);
+        mExpandableListView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
         Query activityRef = FirebaseDatabase.getInstance().getReference("activities").orderByChild("motivationLevel").equalTo(motivation);
         activityRef.addChildEventListener(new ChildEventListener() {
             @Override

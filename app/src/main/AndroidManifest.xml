@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ActivitiesActivity">
+            android:name=".ui.ActivitiesActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.guest.habittracker.ui.MainActivity">
