@@ -28,7 +28,12 @@ import butterknife.ButterKnife;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * TODO: hook up expanded tracker of the habit to database
+ * TODO: Fix bug where keyboard is breaking listview
+ * TODO: add Firebase auth
+ * TODO: calendar
+ * TODO: make it look less terrible
+ * TODO: do the animation/fragment stuff they actually want us to do
  */
 public class ActivitiesFragment extends Fragment {
     @Bind(R.id.addActivityButton)
